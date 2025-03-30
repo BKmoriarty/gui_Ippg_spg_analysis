@@ -65,7 +65,7 @@ class PressureAnalyzer:
         # Finding dicrotic notches
         self.dicrotic_idx = []
         for i in range(len(self.systolic_idx)-1):
-            segment = self.pressure[self.systolic_idx[i]                                    :self.systolic_idx[i+1]]
+            segment = self.pressure[self.systolic_idx[i]:self.systolic_idx[i+1]]
             local_minima = argrelextrema(segment, np.less)[0]
             if len(local_minima) > 0:
                 notch_idx = local_minima[0] + self.systolic_idx[i]
@@ -803,7 +803,7 @@ class PressureAnalyzer:
         T is the time period between consecutive pulse onsets (t(0) to next t(0)).
 
         Returns:
-        - Array of IPR values in beats per minute (bpm)
+        - Array of IPR values in beats per minute (BPM)
         """
         if self.onset_idx is None or len(self.onset_idx) < 2:
             raise RuntimeError("Need at least 2 onset points to calculate IPR")
@@ -818,7 +818,7 @@ class PressureAnalyzer:
         # Compute IPR = 60 / T, handle division by zero
         with np.errstate(divide='warn', invalid='warn'):
             ipr = 60 / T
-            # Replace infinities or NaNs with NaN (or could use a max reasonable bpm, e.g., 300)
+            # Replace infinities or NaNs with NaN (or could use a max reasonable BPM, e.g., 300)
             ipr = np.where(np.isfinite(ipr), ipr, np.nan)
 
         return ipr
@@ -1039,7 +1039,6 @@ class PressureAnalyzer:
             self.find_second_derivative_peaks()
         if self.b_points_idx is None:
             self.find_b_points()
-
 
         if fig is None or ax is None:
             fig, ax = plt.subplots(figsize=(12, 6))

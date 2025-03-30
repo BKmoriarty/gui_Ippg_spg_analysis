@@ -1465,7 +1465,7 @@ class Ui_MainWindow(object):
         self.l3.setText(
             "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">HRV : %.3f s</span></p></body></html>" % (hrv_spg))
         self.l4.setText(
-            "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Heart rate : %d bpm</span></p></body></html>" % (bpm_spg))
+            "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Heart rate : %d BPM</span></p></body></html>" % (bpm_spg))
         self.l5.setText(
             "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Frequency : %.4f Hz</span></p></body></html>" % (fre_spg))
 
@@ -1487,7 +1487,7 @@ class Ui_MainWindow(object):
         self.r3.setText(
             "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">HRV : %.4f s</span></p></body></html>" % (hrv_ppg))
         self.r4.setText(
-            "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Heart rate : %d bpm</span></p></body></html>" % (bpm_ppg))
+            "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Heart rate : %d BPM</span></p></body></html>" % (bpm_ppg))
         self.r5.setText(
             "<html><head/><body><p><span style=\" font-size:12pt; color:#ffffff;\">Frequency : %.4f Hz</span></p></body></html>" % (fre_ppg))
 

@@ -668,7 +668,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>87 bpm</string>
+        <string>87 BPM</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -763,7 +763,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>87 bpm</string>
+        <string>87 BPM</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -823,7 +823,7 @@
         <enum>QFrame::NoFrame</enum>
        </property>
        <property name="text">
-        <string>87 bpm</string>
+        <string>87 BPM</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>

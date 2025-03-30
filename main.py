@@ -4,6 +4,7 @@ import yaml
 from PyQt5.QtWidgets import (
     QApplication, QDialog, QMainWindow, QFileDialog, QMessageBox, QWidget, QVBoxLayout
 )
+from PyQt5.QtCore import QLocale
 from PyQt5.uic import loadUi
 
 from harmonicAnalyzer import HarmonicAnalyzer
@@ -193,9 +194,9 @@ class Window(QMainWindow, Ui_MainWindow):
         self.cppg_snr.setText("- dB")
         self.spg_snr.setText("- dB")
 
-        self.ippg_hr.setText("- bpm")
-        self.cppg_hr.setText("- bpm")
-        self.spg_hr.setText("- bpm")
+        self.ippg_hr.setText("- BPM")
+        self.cppg_hr.setText("- BPM")
+        self.spg_hr.setText("- BPM")
 
         self.ippg_freq.setText("- Hz")
         self.cppg_freq.setText("- Hz")
@@ -381,7 +382,7 @@ class Window(QMainWindow, Ui_MainWindow):
             self.freq_canvas.axes.set_ylim(0, 300)
             self.freq_canvas.draw()
 
-            # self.ippg_hr.setText("- bpm")
+            # self.ippg_hr.setText("- BPM")
             # self.ippg_freq.setText("- Hz")
             # self.ippg_snr.setText("- dB")
 
@@ -502,7 +503,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.freq_result_canvas.draw()
 
         self.ippg_hr.setText(
-            f"{round(config['result']['Heart Rate iPPG'],2)} bpm")
+            f"{round(config['result']['Heart Rate iPPG'],2)} BPM")
         self.ippg_freq.setText(
             f"{round(config['result']['Mag H1 iPPG'],4)}")
         self.ippg_freq_h2.setText(
@@ -512,7 +513,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.ippg_snr.setText(f"{round(config['result']['SNR iPPG'],4)} dB")
 
         self.spg_hr.setText(
-            f"{round(config['result']['Heart Rate SPG'],2)} bpm")
+            f"{round(config['result']['Heart Rate SPG'],2)} BPM")
         self.spg_freq.setText(
             f"{round(config['result']['Mag H1 SPG'],4)}")
         self.spg_freq_h2.setText(
@@ -522,7 +523,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.spg_snr.setText(f"{round(config['result']['SNR SPG'],4)} dB")
 
         self.cppg_hr.setText(
-            f"{round(config['result']['Heart Rate cPPG'],2)} bpm")
+            f"{round(config['result']['Heart Rate cPPG'],2)} BPM")
         self.cppg_freq.setText(
             f"{round(config['result']['Mag H1 cPPG'],4)}")
         self.cppg_freq_h2.setText(
@@ -908,7 +909,7 @@ class Window(QMainWindow, Ui_MainWindow):
         self.freq_canvas.axes.set_ylim(0, 300)
         self.freq_canvas.draw()
 
-        self.ippg_hr.setText(f"{round(freq_data[2]*60,2)} bpm")
+        self.ippg_hr.setText(f"{round(freq_data[2]*60,2)} BPM")
         self.ippg_freq.setText(f"{round(freq_data[2],4)} Hz")
         self.ippg_snr.setText(f"{round(freq_data[3],4)} dB")
 
@@ -1021,6 +1022,7 @@ class Countdown_UI(QDialog):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    QLocale.setDefault(QLocale(QLocale.English, QLocale.UnitedStates))
     win = Window()
     win.show()
     sys.exit(app.exec())

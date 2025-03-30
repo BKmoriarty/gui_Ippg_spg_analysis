@@ -577,7 +577,7 @@ class PressureAnalyzer:
         T is the time period between consecutive pulse onsets (t(0) to next t(0)).
 
         Returns:
-        - Array of IPR values in beats per minute (bpm)
+        - Array of IPR values in beats per minute (BPM)
         """
         if self.onset_idx is None or len(self.onset_idx) < 2:
             raise RuntimeError("Need at least 2 onset points to calculate IPR")
@@ -592,7 +592,7 @@ class PressureAnalyzer:
         # Compute IPR = 60 / T, handle division by zero
         with np.errstate(divide='warn', invalid='warn'):
             ipr = 60 / T
-            # Replace infinities or NaNs with NaN (or could use a max reasonable bpm, e.g., 300)
+            # Replace infinities or NaNs with NaN (or could use a max reasonable BPM, e.g., 300)
             ipr = np.where(np.isfinite(ipr), ipr, np.nan)
 
         return ipr

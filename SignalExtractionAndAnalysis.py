@@ -569,7 +569,7 @@ class Analysis_PPG_SPG:
 
         # Calculate heart rate (if peaks represent heartbeats)
         time_diff = np.diff(time[peaks])
-        heart_rate = 60 / np.mean(time_diff)  # unit is bpm
+        heart_rate = 60 / np.mean(time_diff)  # unit is BPM
 
         return peaks, heart_rate
 
