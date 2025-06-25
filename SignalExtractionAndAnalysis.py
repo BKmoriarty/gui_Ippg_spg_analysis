@@ -729,52 +729,19 @@ class Analysis_PPG_SPG:
         print('.', end='')
         # =========================== ippg pressure ===================================
 
-        pressure_ippg = PressureAnalyzer(
-            time_data=time_ppg, pressure_data=filtered_ppg, sample_rate=self.fps)
-
         # excel_data = self.load_excel(self.excel_path)
         # pressure_ippg = PressureAnalyzer(
         #     time_data=excel_data[0], pressure_data=excel_data[1], sample_rate=135)
 
-        pressure_ippg.find_pressure_features(
-            min_distance=0.5, height_percentile=75, diastolic_prominence=0.001, onset_search_range=0.001)
+        # fig, ax_pressure = plt.subplots(1, 1, figsize=(6, 4))
 
-        results_pressure_ippg = pressure_ippg.get_results()
-        pattern_count = pressure_ippg.detect_pattern()
-        time_delay_systolic_diastolic = pressure_ippg.get_time_delay_systolic_diastolic()
-        crest_time = pressure_ippg.get_crest_time(cast_time_distance=0.5)
-        time_delays_dd = pressure_ippg.get_time_delay_dicrotic_diastolic(
-            notch_to_dia_distance=0.3)
-        t_sys = pressure_ippg.get_t_sys(notch_time_distance=1)
-        t_dia = pressure_ippg.get_t_dia(pulse_end_time_distance=0.5)
-        dw_75 = pressure_ippg.get_diastolic_width(percent=75)
-        dw_66 = pressure_ippg.get_diastolic_width(percent=66)
-        dw_50 = pressure_ippg.get_diastolic_width(percent=50)
-        dw_33 = pressure_ippg.get_diastolic_width(percent=33)
-        dw_25 = pressure_ippg.get_diastolic_width(percent=25)
-        dw_10 = pressure_ippg.get_diastolic_width(percent=10)
-        sw_75 = pressure_ippg.get_systolic_width(percent=75)
-        sw_66 = pressure_ippg.get_systolic_width(percent=66)
-        sw_50 = pressure_ippg.get_systolic_width(percent=50)
-        sw_33 = pressure_ippg.get_systolic_width(percent=33)
-        sw_25 = pressure_ippg.get_systolic_width(percent=25)
-        sw_10 = pressure_ippg.get_systolic_width(percent=10)
-        ipr = pressure_ippg.get_ipr()
-        pulse_amplitude = pressure_ippg.get_pulse_amplitude(time_distance=0.5)
-        reflection_index = pressure_ippg.get_reflection_index(time_distance=1)
-        systolic_area = pressure_ippg.get_systolic_area(time_distance=1)
-        diastolic_area = pressure_ippg.get_diastolic_area(time_distance=1)
-        normalized_max_slope = pressure_ippg.get_normalized_max_slope()
-
-        fig, ax_pressure = plt.subplots(1, 1, figsize=(6, 4))
-
-        fig, ax_pressure = pressure_ippg.plot_results(
-            fig, ax_pressure)
-        ax_pressure.set_xlim(ranges)
-        fig.tight_layout()
-        fig.savefig(
-            f'{"/".join(self.video_path.split("/")[:-1])}/iPPG_pressure.png')
-        print('.', end='')
+        # fig, ax_pressure = pressure_ippg.plot_results(
+        #     fig, ax_pressure)
+        # ax_pressure.set_xlim(ranges)
+        # fig.tight_layout()
+        # fig.savefig(
+        #     f'{"/".join(self.video_path.split("/")[:-1])}/iPPG_pressure.png')
+        # print('.', end='')
         # =========================== SPG ===================================
         # Hz (typical range for heart rate)
         signal_freq_range_spg = (0.83, 4.5)
@@ -1053,31 +1020,6 @@ class Analysis_PPG_SPG:
         ax13.set_xlabel('Time (s)')
         ax13.set_ylabel('Normalized Amplitude')
 
-        # # Plot time delay between valid peak pairs
-        # colors = ['r', 'y', 'c', 'm']
-        # for idx, delay in enumerate(peak_delays):
-        #     color = colors[idx % len(colors)]
-        #     ax14.plot(idx, delay, "o-", color=color)
-        # # ax14.axhline(y=avg_time_delay, color='gray', linestyle='--',
-        # #              label=f'Average Delay: {avg_time_delay:.4f} s')
-        # ax14.set_ylim([-0.2, 0.2])
-        # ax14.set_xlabel('Peak Pair Index')
-        # ax14.set_ylabel('Time Delay (s)')
-        # ax14.set_title('Time Delays Between Corresponding Peaks')
-        # ax14.grid()
-        # # ax14.legend()
-
-        # # Plot difference between SPG and PPG signals
-        # ax15.plot(time_plot, diff, color='b',
-        #           label=f'Avg Diff: {avg_diff:.4f}')
-        # ax15.axhline(y=avg_diff, color='gray', linestyle='--')
-
-        # # ax15.legend()
-        # ax15.grid()
-        # ax15.set_title('Difference Between SPG and PPG Signals')
-        # ax15.set_xlabel('Time (s)')
-        # ax15.set_ylabel('Amplitude Difference')
-
         # save figure to file
         fig.tight_layout()
         fig.savefig(
@@ -1105,47 +1047,6 @@ class Analysis_PPG_SPG:
         ax7.set_title('Integrate Signal')
         ax7.set_xlabel('Time (s)')
         ax7.set_ylabel('Amplitude')
-
-        # offset_ppg = np.mean((filtered_ppg/np.max(filtered_ppg))
-        #                      [peaks_filtered_signal])
-
-        # # offset_excel = np.mean((filtered_excel/np.max(filtered_excel))
-        # #                        [peaks_filtered_excel])
-
-        # # offset_ppg_excel = 1 + np.abs(offset_ppg - offset_excel)
-
-        # ax8.plot(time_plot, (filtered_ppg/np.max(filtered_ppg)),  # * offset_ppg_excel,
-        #          color='b', label='iPPG Signal')
-        # ax8.plot(time_plot[peaks_filtered_signal], (filtered_ppg/np.max(filtered_ppg))[peaks_filtered_signal],  # * offset_ppg_excel,
-        #          color='b', label='Peaks iPPG', marker='o', linestyle='')
-        # ax8.plot(excel_data[0], filtered_excel/np.max(filtered_excel),
-        #          color='r', label='cPPG Signal', linestyle='--')
-        # # ax8.plot(excel_data[0][peaks_filtered_excel], (filtered_excel/np.max(filtered_excel))[peaks_filtered_excel],
-        # #          color='r', label='Peaks cPPG', marker='o', linestyle='')
-
-        # ax8.grid()
-        # # ax8.legend()
-        # ax8.set_title('Integrate iPPG Signal')
-        # ax8.set_xlabel('Time (s)')
-        # ax8.set_ylabel('Amplitude')
-
-        # ax9.plot(excel_data[0], filtered_excel/np.max(filtered_excel),
-        #          color='r', label='cPPG Signal', linestyle='--')
-        # # ax9.plot(excel_data[0][peaks_filtered_excel], (filtered_excel/np.max(filtered_excel))[peaks_filtered_excel],
-        # #          color='r', label='Peaks cPPG', marker='o', linestyle='')
-        # ax9.plot(time_plot, filtered_spg/np.max(filtered_spg),
-        #          color='g', label="SPG Signal")
-        # ax9.plot(time_plot[peaks_filtered_spg], (filtered_spg/np.max(filtered_spg))[peaks_filtered_spg],
-        #          color='g', label="Peaks SPG", marker='o', linestyle='')
-        # ax9.grid()
-        # # ax9.legend()
-        # ax9.set_title('Integrate SPG Signal')
-        # ax9.set_xlabel('Time (s)')
-        # ax9.set_ylabel('Amplitude')
-
-        # # Add MultiCursor to sync movement across subplots
-        # multi = MultiCursor(fig.canvas, (ax7, ax8, ax9), color='y', lw=1,
-        #                     horizOn=True, vertOn=True)
 
         # save figure to file
         fig.tight_layout()
@@ -1227,274 +1128,67 @@ class Analysis_PPG_SPG:
         print(
             f"SNR cPPG: {snr_filtered_excel:.2f}, iPPG: {snr_filtered_ppg:.2f}, SPG: {snr_filtered_spg:.2f} dB")
 
-        qulity_time_delay = 100 * \
-            (1 - np.std(peak_delays) / np.max(peak_delays))
-        qulity_time_delay_count = 100 - (1+len(results_pressure_ippg['systolic']['values'])-len(
-            peak_delays))*100/len(results_pressure_ippg['systolic']['values'])
+        # create config file for use
+        data_config = {
+            "personal": self.personal,
+            "config": {
+                "size_ppg": self.size_ppg,
+                "size_spg": self.size_spg,
+                "exposure_time": self.exposure_time,
+                "fps": self.fps,
+                "time_record": self.time_record
+            },
+        }
 
-        print(
-            f"Average SPG-PPG peaks: {avg_time_delay:.6f}, std: {np.std(peak_delays):.6f}, max: {np.max(peak_delays):.6f} seconds. quality: {(qulity_time_delay+qulity_time_delay_count)/2:.2f}%")
+        with open(f'{"/".join(self.video_path.split("/")[:-1])}/config.yml', "w", encoding="utf-8") as file:
+            yaml.dump(data_config, file, allow_unicode=True,
+                      default_flow_style=False)
 
-        print(f"Freq H3/H1 cPPG: {(harminic_cppg.third_mag/harminic_cppg.fundamental_mag).round(6)}, iPPG: {(harminic_ippg.third_mag/harminic_ippg.fundamental_mag).round(6)}, SPG: {(harminic_spg.third_mag/harminic_spg.fundamental_mag).round(6)}")
-        print(f"Freq H3/H2 cPPG: {(harminic_cppg.third_mag/harminic_cppg.second_mag).round(6)}, iPPG: {(harminic_ippg.third_mag/harminic_ippg.second_mag).round(6)}, SPG: {(harminic_spg.third_mag/harminic_spg.second_mag).round(6)}")
-        print(f"Freq H2/H1 cPPG: {(harminic_cppg.second_mag/harminic_cppg.fundamental_mag).round(6)}, iPPG: {(harminic_ippg.second_mag/harminic_ippg.fundamental_mag).round(6)}, SPG: {(harminic_spg.second_mag/harminic_spg.fundamental_mag).round(6)}")
+        # cppg
+        self.inject_featrue("cPPG", time_excel, filtered_excel, self.fps)
+        # ippg
+        self.inject_featrue("iPPG", time_ppg, filtered_ppg, self.fps)
+        # spg
+        self.inject_featrue("SPG", time_spg, filtered_spg, self.fps)
 
-        print(f"Onset: {len(results_pressure_ippg['onset']['values'])}, Systolic: {len(results_pressure_ippg['systolic']['values'])}, Dicrotic: {len(results_pressure_ippg['dicrotic']['values'])}, Diastolic: {len(results_pressure_ippg['diastolic']['values'])}, complete patterns: {pattern_count}")
+        return [time_ppg, filtered_ppg/np.max(filtered_ppg), filtered_signal_fft1[0], filtered_signal_fft1[1], snr_filtered_ppg, heart_rate_filtered_ppg], [time_spg, filtered_spg/np.max(filtered_spg), filtered_spg_fft[0], filtered_spg_fft[1], snr_filtered_spg, heart_rate_spg], [excel_data[0], filtered_excel/np.max(filtered_excel), filtered_excel_fft[0], filtered_excel_fft[1], snr_filtered_excel, heart_rate_excel], avg_time_delay
+        # return data_feature
 
-        qulity_t_dia_t_sys = 100 * \
-            (1 - np.std(time_delay_systolic_diastolic) /
-             np.max(time_delay_systolic_diastolic))
-        qulity_t_dia_t_sys_count = 100 - (1+len(results_pressure_ippg['systolic']['values'])-len(
-            time_delay_systolic_diastolic))*100/len(results_pressure_ippg['systolic']['values'])
+    def inject_featrue(self, name, time, data, fps):
+        pressure_ippg = PressureAnalyzer(
+            time_data=time, pressure_data=data, sample_rate=fps)
 
-        print(
-            f"Average (t_dia - t_sys): {np.mean(time_delay_systolic_diastolic):.4f}, std: {np.std(time_delay_systolic_diastolic):.4f}, max: {np.max(time_delay_systolic_diastolic):.4f} seconds. quality: {(qulity_t_dia_t_sys+qulity_t_dia_t_sys_count)/2:.2f}%")
+        pressure_ippg.find_pressure_features(
+            min_distance=0.5, height_percentile=75, diastolic_prominence=0.001, onset_search_range=0.001)
 
-        print(
-            f"Stiffness Index h/(t_dia - t_sys): {(170/100)/np.mean(time_delay_systolic_diastolic):.4f}")
-
-        qulity_crest_time = 100 * (1 - np.std(crest_time) / np.max(crest_time))
-        qulity_crest_time_count = 100 - (1+len(results_pressure_ippg['systolic']['values'])-len(
-            crest_time))*100/len(results_pressure_ippg['systolic']['values'])
-
-        print(
-            f"Average Crest Time (t_sys - t_0): {np.mean(crest_time):.4f}, std: {np.std(crest_time):.4f}, max: {np.max(crest_time):.4f} seconds. quality: {(qulity_crest_time+qulity_crest_time_count)/2:.2f}%")
-
-        qulity_dd = 100 * (1 - np.std(time_delays_dd) / np.max(time_delays_dd))
-        qulity_dd_count = 100 - (1+len(results_pressure_ippg['diastolic']['values'])-len(
-            time_delays_dd))*100/len(results_pressure_ippg['diastolic']['values'])
-
-        print(
-            f"Average (t_dic - t_dia): {np.mean(time_delays_dd):.4f}, std: {np.std(time_delays_dd):.4f}, max: {np.max(time_delays_dd):.4f} seconds. quality: {(qulity_dd+qulity_dd_count)/2:.2f}%")
-
-        print(
-            f"t_ratio (t_sys-t(0)) / (t_dia-t_dic)): {np.mean(crest_time)/np.mean(time_delays_dd):.4f}")
-
-        qulity_t_sys = 100 * \
-            (1 - np.std(t_sys) / np.max(t_sys))
-        qulity_t_sys_count = 100 - (1+len(results_pressure_ippg['systolic']['values'])-len(
-            t_sys))*100/len(results_pressure_ippg['systolic']['values'])
-
-        print(
-            f"Average t_sys (t(dic)-t(0)): {np.mean(t_sys):.4f}, std: {np.std(t_sys):.4f}, max: {np.max(t_sys):.4f} seconds. quality: {(qulity_t_sys+qulity_t_sys_count)/2:.2f}%")
-
-        qulity_t_dia = 100 * \
-            (1 - np.std(t_dia) / np.max(t_dia))
-        qulity_t_dia_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            t_dia))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average t_dia (t(0)-t(dic)): {np.mean(t_dia):.4f}, std: {np.std(t_dia):.4f}, max: {np.max(t_dia):.4f} seconds. quality: {(qulity_t_dia+qulity_t_dia_count)/2:.2f}%")
-
-        print(
-            f"t_ratio (t_sys-t_0)/(t(dic)-t(0)): {np.mean(crest_time)/np.mean(t_sys):.4f}")
-
-        qulity_dw_75 = 100 * \
-            (1 - np.std(dw_75) / np.max(dw_75))
-        qulity_dw_75_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_75))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_75: {np.mean(dw_75):.4f}, std: {np.std(dw_75):.4f}, max: {np.max(dw_75):.4f} seconds. quality: {(qulity_dw_75+qulity_dw_75_count)/2:.2f}%")
-
-        qulity_dw_66 = 100 * \
-            (1 - np.std(dw_66) / np.max(dw_66))
-        qulity_dw_66_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_66))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_66: {np.mean(dw_66):.4f}, std: {np.std(dw_66):.4f}, max: {np.max(dw_66):.4f} seconds. quality: {(qulity_dw_66+qulity_dw_66_count)/2:.2f}%")
-
-        qulity_dw_50 = 100 * \
-            (1 - np.std(dw_50) / np.max(dw_50))
-        qulity_dw_50_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_50))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_50: {np.mean(dw_50):.4f}, std: {np.std(dw_50):.4f}, max: {np.max(dw_50):.4f} seconds. quality: {(qulity_dw_50+qulity_dw_50_count)/2:.2f}%")
-
-        qulity_dw_33 = 100 * \
-            (1 - np.std(dw_33) / np.max(dw_33))
-        qulity_dw_33_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_33))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_33: {np.mean(dw_33):.4f}, std: {np.std(dw_33):.4f}, max: {np.max(dw_33):.4f} seconds. quality: {(qulity_dw_33+qulity_dw_33_count)/2:.2f}%")
-
-        qulity_dw_25 = 100 * \
-            (1 - np.std(dw_25) / np.max(dw_25))
-        qulity_dw_25_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_25))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_25: {np.mean(dw_25):.4f}, std: {np.std(dw_25):.4f}, max: {np.max(dw_25):.4f} seconds. quality: {(qulity_dw_25+qulity_dw_25_count)/2:.2f}%")
-
-        qulity_dw_10 = 100 * \
-            (1 - np.std(dw_10) / np.max(dw_10))
-        qulity_dw_10_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            dw_10))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average dw_10: {np.mean(dw_10):.4f}, std: {np.std(dw_10):.4f}, max: {np.max(dw_10):.4f} seconds. quality: {(qulity_dw_10+qulity_dw_10_count)/2:.2f}%")
-
-        qulity_slope = 100 * \
-            (1 - np.std(normalized_max_slope) / np.max(normalized_max_slope))
-        qulity_slope_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            normalized_max_slope))*100/len(results_pressure_ippg['onset']['values'])
-
-        qulity_sw_75 = 100 * \
-            (1 - np.std(sw_75) / np.max(sw_75))
-        qulity_sw_75_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_75))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_75: {np.mean(sw_75):.4f}, std: {np.std(sw_75):.4f}, max: {np.max(sw_75):.4f} seconds. quality: {(qulity_sw_75+qulity_sw_75_count)/2:.2f}%")
-
-        qulity_sw_66 = 100 * \
-            (1 - np.std(sw_66) / np.max(sw_66))
-        qulity_sw_66_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_66))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_66: {np.mean(sw_66):.4f}, std: {np.std(sw_66):.4f}, max: {np.max(sw_66):.4f} seconds. quality: {(qulity_sw_66+qulity_sw_66_count)/2:.2f}%")
-
-        qulity_sw_50 = 100 * \
-            (1 - np.std(sw_50) / np.max(sw_50))
-        qulity_sw_50_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_50))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_50: {np.mean(sw_50):.4f}, std: {np.std(sw_50):.4f}, max: {np.max(sw_50):.4f} seconds. quality: {(qulity_sw_50+qulity_sw_50_count)/2:.2f}%")
-
-        qulity_sw_33 = 100 * \
-            (1 - np.std(sw_33) / np.max(sw_33))
-        qulity_sw_33_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_33))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_33: {np.mean(sw_33):.4f}, std: {np.std(sw_33):.4f}, max: {np.max(sw_33):.4f} seconds. quality: {(qulity_sw_33+qulity_sw_33_count)/2:.2f}%")
-
-        qulity_sw_25 = 100 * \
-            (1 - np.std(sw_25) / np.max(sw_25))
-        qulity_sw_25_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_25))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_25: {np.mean(sw_25):.4f}, std: {np.std(sw_25):.4f}, max: {np.max(sw_25):.4f} seconds. quality: {(qulity_sw_25+qulity_sw_25_count)/2:.2f}%")
-
-        qulity_sw_10 = 100 * \
-            (1 - np.std(sw_10) / np.max(sw_10))
-        qulity_sw_10_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            sw_10))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average sw_10: {np.mean(sw_10):.4f}, std: {np.std(sw_10):.4f}, max: {np.max(sw_10):.4f} seconds. quality: {(qulity_sw_10+qulity_sw_10_count)/2:.2f}%")
-
-        print(f"Average w_75: {np.mean(sw_75)+np.mean(dw_75):.4f}")
-        print(f"Average w_66: {np.mean(sw_66)+np.mean(dw_66):.4f}")
-        print(f"Average w_50: {np.mean(sw_50)+np.mean(dw_50):.4f}")
-        print(f"Average w_33: {np.mean(sw_33)+np.mean(dw_33):.4f}")
-        print(f"Average w_10: {np.mean(sw_10)+np.mean(dw_10):.4f}")
-
-        print(f"Average dw_75/sw_75: {np.mean(dw_75)/np.mean(sw_75):.4f}")
-        print(f"Average dw_66/sw_66: {np.mean(dw_66)/np.mean(sw_66):.4f}")
-        print(f"Average dw_50/sw_50: {np.mean(dw_50)/np.mean(sw_50):.4f}")
-        print(f"Average dw_33/sw_33: {np.mean(dw_33)/np.mean(sw_33):.4f}")
-        print(f"Average dw_10/sw_10: {np.mean(dw_10)/np.mean(sw_10):.4f}")
-
-        qulity_ipr = 100 * \
-            (1 - np.std(ipr) / np.max(ipr))
-        qulity_ipr_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            ipr))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average IPR: {np.mean(ipr):.4f}, std: {np.std(ipr):.4f}, max: {np.max(ipr):.4f} seconds. quality: {(qulity_ipr+qulity_ipr_count)/2:.2f}%")
-
-        qulity_pulse_amplitude = 100 * \
-            (1 - np.std(pulse_amplitude) / np.max(pulse_amplitude))
-        qulity_pulse_amplitude_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            pulse_amplitude))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average pulse amplitude: {np.mean(pulse_amplitude):.4f}, std: {np.std(pulse_amplitude):.4f}, max: {np.max(pulse_amplitude):.4f} seconds. quality: {(qulity_pulse_amplitude+qulity_pulse_amplitude_count)/2:.2f}%")
-
-        qulity_reflection_index = 100 * \
-            (1 - np.std(reflection_index) / np.max(reflection_index))
-        qulity_reflection_index_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            reflection_index))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average reflection index: {np.mean(reflection_index):.4f}, std: {np.std(reflection_index):.4f}, max: {np.max(reflection_index):.4f} seconds. quality: {(qulity_reflection_index+qulity_reflection_index_count)/2:.2f}%")
-
-        qulity_systolic_area = 100 * \
-            (1 - np.std(systolic_area) / np.max(systolic_area))
-        qulity_systolic_area_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            systolic_area))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average systolic area: {np.mean(systolic_area):.4f}, std: {np.std(systolic_area):.4f}, max: {np.max(systolic_area):.4f} seconds. quality: {(qulity_systolic_area+qulity_systolic_area_count)/2:.2f}%")
-
-        qulity_diastolic_area = 100 * \
-            (1 - np.std(diastolic_area) / np.max(diastolic_area))
-        qulity_diastolic_area_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            diastolic_area))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average diastolic area: {np.mean(diastolic_area):.4f}, std: {np.std(diastolic_area):.4f}, max: {np.max(diastolic_area):.4f} seconds. quality: {(qulity_diastolic_area+qulity_diastolic_area_count)/2:.2f}%")
-
-        print(
-            f"IPA inflection point: {np.mean(diastolic_area)/np.mean(systolic_area):.4f}")
-
-        qulity_slope = 100 * \
-            (1 - np.std(normalized_max_slope) / np.max(normalized_max_slope))
-        qulity_slope_count = 100 - (1+len(results_pressure_ippg['onset']['values'])-len(
-            normalized_max_slope))*100/len(results_pressure_ippg['onset']['values'])
-
-        print(
-            f"Average maximum slope x'(ms)/(x(sys)-x(0)): {np.mean(normalized_max_slope):.4f}, std: {np.std(normalized_max_slope):.4f}, max: {np.max(normalized_max_slope):.4f} seconds. quality: {(qulity_slope+qulity_slope_count)/2:.2f}%")
-
-        print('\n')
+        results_pressure_ippg = pressure_ippg.get_results()
+        pattern_count = pressure_ippg.detect_pattern()
+        time_delay_systolic_diastolic = pressure_ippg.get_time_delay_systolic_diastolic()
+        crest_time = pressure_ippg.get_crest_time(cast_time_distance=0.5)
+        time_delays_dd = pressure_ippg.get_time_delay_dicrotic_diastolic(
+            notch_to_dia_distance=0.3)
+        t_sys = pressure_ippg.get_t_sys(notch_time_distance=1)
+        t_dia = pressure_ippg.get_t_dia(pulse_end_time_distance=0.5)
+        dw_75 = pressure_ippg.get_diastolic_width(percent=75)
+        dw_66 = pressure_ippg.get_diastolic_width(percent=66)
+        dw_50 = pressure_ippg.get_diastolic_width(percent=50)
+        dw_33 = pressure_ippg.get_diastolic_width(percent=33)
+        dw_25 = pressure_ippg.get_diastolic_width(percent=25)
+        dw_10 = pressure_ippg.get_diastolic_width(percent=10)
+        sw_75 = pressure_ippg.get_systolic_width(percent=75)
+        sw_66 = pressure_ippg.get_systolic_width(percent=66)
+        sw_50 = pressure_ippg.get_systolic_width(percent=50)
+        sw_33 = pressure_ippg.get_systolic_width(percent=33)
+        sw_25 = pressure_ippg.get_systolic_width(percent=25)
+        sw_10 = pressure_ippg.get_systolic_width(percent=10)
+        ipr = pressure_ippg.get_ipr()
+        pulse_amplitude = pressure_ippg.get_pulse_amplitude(time_distance=0.5)
+        reflection_index = pressure_ippg.get_reflection_index(time_distance=1)
+        systolic_area = pressure_ippg.get_systolic_area(time_distance=1)
+        diastolic_area = pressure_ippg.get_diastolic_area(time_distance=1)
+        normalized_max_slope = pressure_ippg.get_normalized_max_slope()
 
         data_feature = {
-            "name": self.personal['name'],
-            "age": self.personal['age'],
-            "gender": self.personal['gender'],
-            "height": self.personal['height'],
-            "weight": self.personal['weight'],
-            "congenital_disease": self.personal['congenital_disease'],
-            "congenital_disease_detail": self.personal['congenital_disease_detail'],
-
-            "size_ppg": self.size_ppg,
-            "size_spg": self.size_spg,
-            "exposure_time": self.exposure_time,
-            "fps": self.fps,
-            "time_record": self.time_record,
-
-            'SNR iPPG': float(snr_filtered_ppg.round(2)),
-            'SNR SPG': float(snr_filtered_spg.round(2)),
-            'SNR cPPG': float(snr_filtered_excel.round(2)),
-            'Average Time Delay': float(avg_time_delay.round(6)),
-            'Heart Rate iPPG': float(heart_rate_filtered_ppg.round(2)),
-            'Heart Rate SPG': float(heart_rate_spg.round(2)),
-            'Heart Rate cPPG': float(heart_rate_excel.round(2)),
-            'Freq H1 cPPG': float((harminic_cppg.fundamental_freq).round(6)),
-            'Freq H1 iPPG': float((harminic_ippg.fundamental_freq).round(6)),
-            'Freq H1 SPG': float((harminic_spg.fundamental_freq).round(6)),
-            'Freq H2 cPPG': float((harminic_cppg.second_freq).round(6)),
-            'Freq H2 iPPG': float((harminic_ippg.second_freq).round(6)),
-            'Freq H2 SPG': float((harminic_spg.second_freq).round(6)),
-            'Freq H3 cPPG': float((harminic_cppg.third_freq).round(6)),
-            'Freq H3 iPPG': float((harminic_ippg.third_freq).round(6)),
-            'Freq H3 SPG': float((harminic_spg.third_freq).round(6)),
-            'Mag H1 cPPG': float((harminic_cppg.fundamental_mag).round(6)),
-            'Mag H1 iPPG': float((harminic_ippg.fundamental_mag).round(6)),
-            'Mag H1 SPG': float((harminic_spg.fundamental_mag).round(6)),
-            'Mag H2 cPPG': float((harminic_cppg.second_mag).round(6)),
-            'Mag H2 iPPG': float((harminic_ippg.second_mag).round(6)),
-            'Mag H2 SPG': float((harminic_spg.second_mag).round(6)),
-            'Mag H3 cPPG': float((harminic_cppg.third_mag).round(6)),
-            'Mag H3 iPPG': float((harminic_ippg.third_mag).round(6)),
-            'Mag H3 SPG': float((harminic_spg.third_mag).round(6)),
             'onset': int(len(results_pressure_ippg['onset']['values'])),
             'systolic': int(len(results_pressure_ippg['systolic']['values'])),
             'dicrotic': int(len(results_pressure_ippg['dicrotic']['values'])),
@@ -1542,99 +1236,12 @@ class Analysis_PPG_SPG:
         }
 
         # save to excel
+        excel_path = "/".join(self.video_path.split("/")
+                              [:-1]) + "/data_feature.xlsx"
+
         df = pd.DataFrame([data_feature])
-        df.to_excel(
-            f'{"/".join(self.video_path.split("/")[:-1])}/data_feature.xlsx', index=False)
-
-        # create config file for use
-        data_config = {
-            "personal": self.personal,
-            "config": {
-                "size_ppg": self.size_ppg,
-                "size_spg": self.size_spg,
-                "exposure_time": self.exposure_time,
-                "fps": self.fps,
-                "time_record": self.time_record
-            },
-            "result": {
-                'SNR iPPG': float(snr_filtered_ppg.round(2)),
-                'SNR SPG': float(snr_filtered_spg.round(2)),
-                'SNR cPPG': float(snr_filtered_excel.round(2)),
-                'Average Time Delay': float(avg_time_delay.round(6)),
-                'Heart Rate iPPG': float(heart_rate_filtered_ppg.round(2)),
-                'Heart Rate SPG': float(heart_rate_spg.round(2)),
-                'Heart Rate cPPG': float(heart_rate_excel.round(2)),
-                'Freq H1 cPPG': float((harminic_cppg.fundamental_freq).round(6)),
-                'Freq H1 iPPG': float((harminic_ippg.fundamental_freq).round(6)),
-                'Freq H1 SPG': float((harminic_spg.fundamental_freq).round(6)),
-                'Freq H2 cPPG': float((harminic_cppg.second_freq).round(6)),
-                'Freq H2 iPPG': float((harminic_ippg.second_freq).round(6)),
-                'Freq H2 SPG': float((harminic_spg.second_freq).round(6)),
-                'Freq H3 cPPG': float((harminic_cppg.third_freq).round(6)),
-                'Freq H3 iPPG': float((harminic_ippg.third_freq).round(6)),
-                'Freq H3 SPG': float((harminic_spg.third_freq).round(6)),
-                'Mag H1 cPPG': float((harminic_cppg.fundamental_mag).round(6)),
-                'Mag H1 iPPG': float((harminic_ippg.fundamental_mag).round(6)),
-                'Mag H1 SPG': float((harminic_spg.fundamental_mag).round(6)),
-                'Mag H2 cPPG': float((harminic_cppg.second_mag).round(6)),
-                'Mag H2 iPPG': float((harminic_ippg.second_mag).round(6)),
-                'Mag H2 SPG': float((harminic_spg.second_mag).round(6)),
-                'Mag H3 cPPG': float((harminic_cppg.third_mag).round(6)),
-                'Mag H3 iPPG': float((harminic_ippg.third_mag).round(6)),
-                'Mag H3 SPG': float((harminic_spg.third_mag).round(6)),
-                'onset': int(len(results_pressure_ippg['onset']['values'])),
-                'systolic': int(len(results_pressure_ippg['systolic']['values'])),
-                'dicrotic': int(len(results_pressure_ippg['dicrotic']['values'])),
-                'diastolic': int(len(results_pressure_ippg['diastolic']['values'])),
-                'complete patterns': int(pattern_count),
-                'Average (t_dia - t_sys)': float(np.mean(time_delay_systolic_diastolic).round(6)),
-                'Stiffness Index h/(t_dia - t_sys)': float(((170/100)/np.mean(time_delay_systolic_diastolic)).round(6)),
-                'Average Crest Time (t_sys - t_0)': float(np.mean(crest_time).round(6)),
-                'Average (t_dic - t_dia)': float(np.mean(time_delays_dd).round(6)),
-                't_ratio (t_sys-t(0)) / (t_dia-t_dic)': float((np.mean(crest_time)/np.mean(time_delays_dd)).round(6)),
-                'Average t_sys (t(dic)-t(0))': float(np.mean(t_sys).round(6)),
-                'Average t_dia (t(0)-t(dic))': float(np.mean(t_dia).round(6)),
-                'Average dw_75': float(np.mean(dw_75).round(6)),
-                'Average dw_66': float(np.mean(dw_66).round(6)),
-                'Average dw_50': float(np.mean(dw_50).round(6)),
-                'Average dw_33': float(np.mean(dw_33).round(6)),
-                'Average dw_25': float(np.mean(dw_25).round(6)),
-                'Average dw_10': float(np.mean(dw_10).round(6)),
-                'Average sw_75': float(np.mean(sw_75).round(6)),
-                'Average sw_66': float(np.mean(sw_66).round(6)),
-                'Average sw_50': float(np.mean(sw_50).round(6)),
-                'Average sw_33': float(np.mean(sw_33).round(6)),
-                'Average sw_25': float(np.mean(sw_25).round(6)),
-                'Average sw_10': float(np.mean(sw_10).round(6)),
-                'Average w_75': float((np.mean(sw_75)+np.mean(dw_75)).round(6)),
-                'Average w_66': float((np.mean(sw_66)+np.mean(dw_66)).round(6)),
-                'Average w_50': float((np.mean(sw_50)+np.mean(dw_50)).round(6)),
-                'Average w_33': float((np.mean(sw_33)+np.mean(dw_33)).round(6)),
-                'Average w_25': float((np.mean(sw_25)+np.mean(dw_25)).round(6)),
-                'Average w_10': float((np.mean(sw_10)+np.mean(dw_10)).round(6)),
-                'Average dw_75/sw_75': float((np.mean(dw_75)/np.mean(sw_75)).round(6)),
-                'Average dw_66/sw_66': float((np.mean(dw_66)/np.mean(sw_66)).round(6)),
-                'Average dw_50/sw_50': float((np.mean(dw_50)/np.mean(sw_50)).round(6)),
-                'Average dw_33/sw_33': float((np.mean(dw_33)/np.mean(sw_33)).round(6)),
-                'Average dw_25/sw_25': float((np.mean(dw_25)/np.mean(sw_25)).round(6)),
-                'Average dw_10/sw_10': float((np.mean(dw_10)/np.mean(sw_10)).round(6)),
-                'Average IPR': float(np.mean(ipr).round(6)),
-                'Average pulse amplitude': float(np.mean(pulse_amplitude).round(6)),
-                'Average reflection index': float(np.mean(reflection_index).round(6)),
-                'Average systolic area': float(np.mean(systolic_area).round(6)),
-                'Average diastolic area': float(np.mean(diastolic_area).round(6)),
-                'IPA inflection point': float((np.mean(diastolic_area)/np.mean(systolic_area)).round(6)),
-                'Average maximum slope': float(np.mean(normalized_max_slope).round(6)),
-
-            }
-        }
-
-        with open(f'{"/".join(self.video_path.split("/")[:-1])}/config.yml', "w", encoding="utf-8") as file:
-            yaml.dump(data_config, file, allow_unicode=True,
-                      default_flow_style=False)
-
-        return [time_ppg, filtered_ppg/np.max(filtered_ppg), filtered_signal_fft1[0], filtered_signal_fft1[1], snr_filtered_ppg, heart_rate_filtered_ppg], [time_spg, filtered_spg/np.max(filtered_spg), filtered_spg_fft[0], filtered_spg_fft[1], snr_filtered_spg, heart_rate_spg], [excel_data[0], filtered_excel/np.max(filtered_excel), filtered_excel_fft[0], filtered_excel_fft[1], snr_filtered_excel, heart_rate_excel], avg_time_delay
-        # return data_feature
+        with pd.ExcelWriter(excel_path, engine='openpyxl') as writer:
+            df.to_excel(writer, sheet_name=name, index=False)
 
 
 if __name__ == "__main__":
